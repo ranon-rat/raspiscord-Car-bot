@@ -8,14 +8,14 @@ WiFiServer server(80);
 
 void setup()
 {
-  Serial.begin(115200)
+  Serial.begin(9600);
   WiFi.begin(SSID, PASS);
   Serial.println("starting server");
   while (WiFi.status() != WL_CONNECTED)
   {
     delay(500);
   }
-  Serial.printf("ip: %s", WiFi.localIP().toString().c_str());
+  
   server.begin();
   // put your setup code here, to run once:
 }
@@ -38,6 +38,7 @@ void loop()
 
         if (c == '\n')
         {
+          Serial.printf("IP: %s\n", WiFi.localIP().toString().c_str());
           client.println("HTTP/1.1 200 OK");
           client.println("Content-type:text/html");
           client.println("Connection: close");
@@ -50,16 +51,19 @@ void loop()
           else if (header.indexOf("GET /left" > 0))
           {
 
-            Serial.println("left");
+            Serial.println("LEFT");
             header = "";
           }
           else if (header.indexOf("GET /right" > 0))
           {
 
-            Serial.println("right");
+            Serial.println("RIGHT");
             header = "";
           }
-          client.printf("%s", interface);
+          client.println( interface);
+          client.println();
+          header = "";
+          break;
         }
       }
     }
